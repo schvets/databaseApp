@@ -1,36 +1,44 @@
 import PageFactory.MainPage;
 import PageFactory.PromptPage;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import tools.WebDriverUtils;
 
-import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aleksandr on 11.05.2017.
  */
 public class ConnectionToDBTestCase {
+    static WebDriver driver;
+
     @BeforeTest
     public void setUp(){
-        WebDriverUtils.OpenUrl("http://www.ranorex.com/web-testing-examples/vip/");
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
+
     }
 
     @AfterTest
     public void tearDown() {
-        WebDriverUtils.stop();
+        driver.close();
     }
 
     @BeforeMethod
     public void setUpBeforeMethod() {
-        WebDriverUtils.OpenUrl("http://www.ranorex.com/web-testing-examples/vip/");
+        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
     }
 
     @Test
-    private void disconnectFromDB() {
-        MainPage mainPage = new MainPage(WebDriverUtils.getWebDriver());
+    public void disconnectFromDB() {
+        MainPage mainPage = new MainPage(driver);
         if (mainPage.getTextConnectionLabel().equals("Online")){
             mainPage.clickConnectButton();
         }
@@ -39,25 +47,43 @@ public class ConnectionToDBTestCase {
     }
 
     @Test
-    private void reconnectToDB() {
-        Set<String> oldWindowsSet = WebDriverUtils.getWebDriver().getWindowHandles();
-        MainPage mainPage = new MainPage(WebDriverUtils.getWebDriver());
+    public void reconnectToDB() {
+        MainPage mainPage = new MainPage(driver);
         if (mainPage.getTextConnectionLabel().equals("Online")){
             mainPage.clickConnectButton();
             mainPage.clickConnectButton();
-            Set<String> newWindowsSet =  WebDriverUtils.getWebDriver().getWindowHandles();
-            newWindowsSet.removeAll(oldWindowsSet);
-            String newWindowHandle = newWindowsSet.iterator().next();
-            WebDriverUtils.getWebDriver().switchTo().window(newWindowHandle);
-            PromptPage promptPage = new PromptPage(WebDriverUtils.getWebDriver());
+            for (String winHandle : driver.getWindowHandles()) {
+                driver.switchTo().window(winHandle);
+            }
+            PromptPage promptPage = new PromptPage(driver);
             promptPage.clickOkButton();
-            Set<String> restoredWindowsSet = WebDriverUtils.getWebDriver().getWindowHandles();
-            String restoredWindowHandle = restoredWindowsSet.iterator().next();
-            WebDriverUtils.getWebDriver().switchTo().window(restoredWindowHandle);
+            for (String winHandle : driver.getWindowHandles()) {
+                driver.switchTo().window(winHandle);
+            }
         }
-
+        new WebDriverWait(driver, 10)
+                .until(ExpectedConditions
+                        .textToBePresentInElement(mainPage.getConnectionLabelWebElement(), "Online"));
         String expText = mainPage.getTextConnectionLabel();
-        System.out.println(expText);
         Assert.assertTrue(expText.equals("Online"));
+    }
+
+    @Test
+    public void cancelReconnectToDB() {
+        MainPage mainPage = new MainPage(driver);
+        if (mainPage.getTextConnectionLabel().equals("Online")) {
+            mainPage.clickConnectButton();
+            mainPage.clickConnectButton();
+            for (String winHandle : driver.getWindowHandles()) {
+                driver.switchTo().window(winHandle);
+            }
+            PromptPage promptPage = new PromptPage(driver);
+            promptPage.clickCancelButton();
+            for (String winHandle : driver.getWindowHandles()) {
+                driver.switchTo().window(winHandle);
+            }
+        }
+        String expText = mainPage.getTextConnectionLabel();
+        Assert.assertTrue(expText.equals("Offline"));
     }
 }

@@ -5,19 +5,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+
 /**
- * Created by Aleksandr on 11.05.2017.
+ * Created by 485 on 12.05.2017.
  */
-public class PromptPage {
+public class AlertPage {
+
     final WebDriver driver;
 
-    @FindBy(css="#alertOKCancel > center > button:nth-child(3)")
+    @FindBy(css = "#alertOK > center > button")
     WebElement okButton;
 
-    @FindBy(css="#alertOKCancel > center > button:nth-child(4)")
-    WebElement cancelButton;
-
-    public PromptPage(WebDriver driver){
+    public AlertPage(WebDriver driver) {
 
         this.driver = driver;
 
@@ -26,12 +25,9 @@ public class PromptPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void clickOkButton() {
+    public void clickOkButtonAlert() {
         okButton.click();
     }
-
-    public void clickCancelButton(){
-        cancelButton.click();
-    }
 }
+
 
