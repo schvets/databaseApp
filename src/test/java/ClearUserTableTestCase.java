@@ -48,7 +48,7 @@ public class ClearUserTableTestCase {
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         webDriverUtils.PageSwitchTo();
         mainPage.createNewUser(user);
-        while (new WebDriverUtils().getTitle().equals("VIP Database")) {
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
             webDriverUtils.PageSwitchTo();
         }
         new AlertPage().clickOkButtonAlert();

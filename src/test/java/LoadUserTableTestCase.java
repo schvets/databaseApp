@@ -3,12 +3,10 @@ import PageFactory.MainPage;
 import PageFactory.UserTablePage;
 import entities.User;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import tools.TestConfig;
 import tools.WebDriverUtils;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aleksandr on 12.05.2017.
@@ -55,20 +53,17 @@ public class LoadUserTableTestCase {
         Assert.assertTrue(userTablePage.isUserPresentedOnPage(user));
     }
 
+    @BeforeMethod
+    public void refresh() {
+        new WebDriverUtils().refresh();
+    }
     @BeforeTest
     public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
+        new WebDriverUtils().load(new TestConfig().getSystemUnderTestBaseUrl());
     }
 
     @AfterTest
     public void tearDown() {
-        driver.close();
-    }
-
-    @BeforeMethod
-    public void setUpBeforeMethod() {
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
+        new WebDriverUtils().stop();
     }
 }
