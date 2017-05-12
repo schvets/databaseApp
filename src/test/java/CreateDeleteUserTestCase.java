@@ -2,7 +2,6 @@ import PageFactory.AlertPage;
 import PageFactory.MainPage;
 import PageFactory.UserTablePage;
 import entities.User;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import tools.TestConfig;
@@ -12,7 +11,6 @@ import tools.WebDriverUtils;
  * Created by 485 on 11.05.2017.
  */
 public class CreateDeleteUserTestCase {
-    WebDriver driver;
 
     @DataProvider
     public Object[][] validUser() {

@@ -1,6 +1,5 @@
 import PageFactory.MainPage;
 import PageFactory.PromptPage;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -15,8 +14,6 @@ import tools.WebDriverUtils;
  * Created by Aleksandr on 11.05.2017.
  */
 public class ConnectionToDBTestCase {
-    WebDriver driver;
-
     @Test
     public void disconnectFromDB() {
         MainPage mainPage = new MainPage();

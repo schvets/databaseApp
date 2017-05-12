@@ -2,7 +2,6 @@ import PageFactory.AlertPage;
 import PageFactory.MainPage;
 import PageFactory.UserTablePage;
 import entities.User;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import tools.TestConfig;
@@ -12,7 +11,6 @@ import tools.WebDriverUtils;
  * Created by Aleksandr on 12.05.2017.
  */
 public class LoadUserTableTestCase {
-    WebDriver driver;
 
     @Test
     public void LoadUserTableWOConnection() {
