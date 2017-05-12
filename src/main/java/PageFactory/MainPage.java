@@ -1,7 +1,6 @@
 package PageFactory;
 
 import entities.User;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,10 +29,10 @@ public class MainPage {
     @FindBy(id = "LastName")
     WebElement textInputLastName;
 
-    @FindBy(css = "#gender > table > tbody > tr:nth-child(2) > td")
+    @FindBy(xpath = "//input[@value='female']")
     WebElement radioButtonFemale;
 
-    @FindBy(css = "#gender > table > tbody > tr:nth-child(3) > td")
+    @FindBy(xpath = "//input[@value='male']")
     WebElement radioButtonMale;
 
     @FindBy(id = "Gender")
@@ -62,9 +61,6 @@ public class MainPage {
 
     @FindBy(id = "count")
     WebElement countLabel;
-
-    @FindBy(css = "#VIPs > tbody > tr")
-    List<WebElement> userList;
 
     public MainPage(WebDriver driver) {
 
@@ -154,28 +150,18 @@ public class MainPage {
         selectRadioButton(user.getUserSex());
         clickAddButton();
         clickSaveButton();
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle);
-        }
-        AlertPage alertPage = new AlertPage(driver);
-        alertPage.clickOkButtonAlert();
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle);
-        }
     }
 
     public WebElement getConnectionLabelWebElement() {
-        return driver.findElement(By.id("connection"));
+        return connectionLabel;
     }
 
-
-    public int getTableSize() {
-        return userList.size();
+    public boolean isSaveButtonClickable() {
+        return saveButton.isEnabled();
     }
 
-/*    public User getUserByName(String name){
-        for(int i= 0 ; i>=(getTableSize() - 1); i++){
+    public boolean isLoadButtonClickable() {
+        return loadButton.isEnabled();
+    }
 
-        }
-    }*/
 }

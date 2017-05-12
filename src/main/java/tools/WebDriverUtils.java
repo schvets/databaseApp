@@ -1,18 +1,14 @@
 package tools;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by stas on 2/14/17.
  */
 public class WebDriverUtils {
+    WebDriver driver;
 
-    private static WebDriver driver;
+/*
     private static final int implicitlyWaitTimeOut = 15;
 
     private WebDriverUtils() {
@@ -50,6 +46,12 @@ public class WebDriverUtils {
         new WebDriverWait(driver, 3).until(ExpectedConditions.alertIsPresent());
         driver.switchTo().alert();
     }
+*/
 
 
+    public void PageSwitchTo() {
+        for (String winHandle : driver.getWindowHandles()) {
+            driver.switchTo().window(winHandle);
+        }
+    }
 }
