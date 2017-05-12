@@ -16,4 +16,4 @@ https://maven.apache.org/download.cgi
 https://maven.apache.org/install.html
 5) download project archive, unzip to directory
 6) run bash in selected directory
-7) type mvn test
+7) type mvn test --> press Enter
