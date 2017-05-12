@@ -18,15 +18,15 @@ public class LoadUserTableTestCase {
 
     @Test
     public void LoadUserTableWOConnection() {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         mainPage.clickConnectButton();
         Assert.assertFalse(mainPage.isLoadButtonClickable());
     }
 
     @Test
     public void LoadUserTableWithConnection() {
-        MainPage mainPage = new MainPage(driver);
-        UserTablePage userTablePage = new UserTablePage(driver);
+        MainPage mainPage = new MainPage();
+        UserTablePage userTablePage = new UserTablePage();
         int startUserTable = userTablePage.getUserCount();
         mainPage.clickLoadButton();
         Assert.assertNotEquals(userTablePage.getUserCount(), startUserTable);
@@ -42,15 +42,15 @@ public class LoadUserTableTestCase {
 
     @Test(dataProvider = "validUser")
     public void LoadUserTableAfterNewUserSaveWithConnection(User user) {
-        MainPage mainPage = new MainPage(driver);
-        UserTablePage userTablePage = new UserTablePage(driver);
+        MainPage mainPage = new MainPage();
+        UserTablePage userTablePage = new UserTablePage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         mainPage.createNewUser(user);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        webDriverUtils.PageSwitchTo(driver);
+        new AlertPage().clickOkButtonAlert();
+        webDriverUtils.PageSwitchTo();
         mainPage.clickLoadButton();
         Assert.assertTrue(userTablePage.isUserPresentedOnPage(user));
     }

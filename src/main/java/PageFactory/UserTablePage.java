@@ -2,10 +2,10 @@ package PageFactory;
 
 import entities.User;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import tools.WebDriverUtils;
 
 import java.util.List;
 import java.util.Random;
@@ -17,19 +17,14 @@ public class UserTablePage {
     /**
      * All WebElements are identified by @FindBy annotation
      */
-    WebDriver driver;
     @FindBy(xpath = "//table[@id='VIPs']/tbody/tr")
     List<WebElement> userList;
 
     private List<WebElement> users;
 
-    public UserTablePage(WebDriver driver) {
-
-        this.driver = driver;
-
+    public UserTablePage() {
         //This initElements method will create all WebElements
-
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(new WebDriverUtils().getDriver(), this);
     }
 
     public int getUserCount() {

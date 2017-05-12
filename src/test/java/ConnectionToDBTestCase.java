@@ -1,7 +1,6 @@
 import PageFactory.MainPage;
 import PageFactory.PromptPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -9,9 +8,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import tools.TestConfig;
 import tools.WebDriverUtils;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aleksandr on 11.05.2017.
@@ -21,7 +19,7 @@ public class ConnectionToDBTestCase {
 
     @Test
     public void disconnectFromDB() {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         while (mainPage.connectionChecher()) {
             mainPage.clickConnectButton();
         }
@@ -31,17 +29,17 @@ public class ConnectionToDBTestCase {
 
     @Test
     public void reconnectToDB() {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         while (mainPage.connectionChecher()) {
             mainPage.clickConnectButton();
         }
         mainPage.clickConnectButton();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
-        webDriverUtils.PageSwitchTo(driver);
-        PromptPage promptPage = new PromptPage(driver);
+        webDriverUtils.PageSwitchTo();
+        PromptPage promptPage = new PromptPage();
         promptPage.clickOkButton();
-        webDriverUtils.PageSwitchTo(driver);
-        new WebDriverWait(driver, 10)
+        webDriverUtils.PageSwitchTo();
+        new WebDriverWait(new WebDriverUtils().getDriver(), 10)
                 .until(ExpectedConditions
                         .textToBePresentInElement(mainPage.getConnectionLabelWebElement(), "Online"));
         String expText = mainPage.getTextConnectionLabel();
@@ -50,36 +48,32 @@ public class ConnectionToDBTestCase {
 
     @Test
     public void cancelReconnectToDB() {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         while (mainPage.connectionChecher()) {
             mainPage.clickConnectButton();
         }
         mainPage.clickConnectButton();
-        webDriverUtils.PageSwitchTo(driver);
-        PromptPage promptPage = new PromptPage(driver);
+        webDriverUtils.PageSwitchTo();
+        PromptPage promptPage = new PromptPage();
         promptPage.clickCancelButton();
-        webDriverUtils.PageSwitchTo(driver);
+        webDriverUtils.PageSwitchTo();
         String expText = mainPage.getTextConnectionLabel();
         Assert.assertTrue(expText.equals("Offline"));
     }
 
+    @BeforeMethod
+    public void refresh() {
+        new WebDriverUtils().refresh();
+    }
     @BeforeTest
     public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
-
+        new WebDriverUtils().load(new TestConfig().getSystemUnderTestBaseUrl());
     }
 
     @AfterTest
     public void tearDown() {
-        driver.close();
-    }
-
-    @BeforeMethod
-    public void setUpBeforeMethod() {
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
+        new WebDriverUtils().stop();
     }
 
 }

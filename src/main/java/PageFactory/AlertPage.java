@@ -1,9 +1,9 @@
 package PageFactory;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import tools.WebDriverUtils;
 
 
 /**
@@ -11,18 +11,15 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class AlertPage {
 
-    final WebDriver driver;
 
     @FindBy(css = "#alertOK > center > button")
     WebElement okButton;
 
-    public AlertPage(WebDriver driver) {
-
-        this.driver = driver;
+    public AlertPage() {
 
         //This initElements method will create all WebElements
 
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(new WebDriverUtils().getDriver(), this);
     }
 
     public void clickOkButtonAlert() {

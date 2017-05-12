@@ -2,11 +2,11 @@ package PageFactory;
 
 import entities.User;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import tools.WebDriverUtils;
 
 import java.util.List;
 
@@ -18,8 +18,6 @@ public class MainPage {
     /**
      * All WebElements are identified by @FindBy annotation
      */
-    final WebDriver driver;
-
     @FindBy(id = "connect")
     WebElement connectButton;
 
@@ -62,15 +60,12 @@ public class MainPage {
     @FindBy(id = "count")
     WebElement countLabel;
 
-    public MainPage(WebDriver driver) {
-
-        this.driver = driver;
+    public MainPage() {
 
         //This initElements method will create all WebElements
 
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(new WebDriverUtils().getDriver(), this);
     }
-
 
     public void clickConnectButton() {
         connectButton.click();

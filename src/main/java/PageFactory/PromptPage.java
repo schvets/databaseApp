@@ -1,15 +1,14 @@
 package PageFactory;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import tools.WebDriverUtils;
 
 /**
  * Created by Aleksandr on 11.05.2017.
  */
 public class PromptPage {
-    final WebDriver driver;
 
     @FindBy(css="#alertOKCancel > center > button:nth-child(3)")
     WebElement okButton;
@@ -17,13 +16,11 @@ public class PromptPage {
     @FindBy(css="#alertOKCancel > center > button:nth-child(4)")
     WebElement cancelButton;
 
-    public PromptPage(WebDriver driver){
-
-        this.driver = driver;
+    public PromptPage() {
 
         //This initElements method will create all WebElements
 
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(new WebDriverUtils().getDriver(), this);
     }
 
     public void clickOkButton() {

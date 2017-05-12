@@ -3,12 +3,10 @@ import PageFactory.MainPage;
 import PageFactory.UserTablePage;
 import entities.User;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import tools.TestConfig;
 import tools.WebDriverUtils;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by 485 on 11.05.2017.
@@ -26,22 +24,22 @@ public class CreateDeleteUserTestCase {
 
     @Test(dataProvider = "validUser")
     public void CreateValidUserDBStateConnect(User user) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         mainPage.createNewUser(user);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        webDriverUtils.PageSwitchTo(driver);
+        new AlertPage().clickOkButtonAlert();
+        webDriverUtils.PageSwitchTo();
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), true);
     }
 
     @Test(dataProvider = "validUser")
     public void CreateValidUserDBStateDisconnect(User user) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         mainPage.clickConnectButton();
         mainPage.createNewUser(user);
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), true);
@@ -61,24 +59,22 @@ public class CreateDeleteUserTestCase {
 
     @Test(dataProvider = "invalidUser")
     public void CreateInvalidUserDBStateConnect(User user) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         mainPage.createNewUser(user);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle);
-        }
+        new AlertPage().clickOkButtonAlert();
+        webDriverUtils.PageSwitchTo();
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), false);
     }
 
     @Test(dataProvider = "invalidUser")
     public void CreateInvalidUserDBStateDisconnect(User user) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         mainPage.clickConnectButton();
         mainPage.createNewUser(user);
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), false);
@@ -94,39 +90,39 @@ public class CreateDeleteUserTestCase {
 
     @Test(dataProvider = "duplicateUser")
     public void CreateDuplicateUserDBStateDisconnect(User user1, User user2) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         mainPage.createNewUser(user1);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle);
+        new AlertPage().clickOkButtonAlert();
+        for (String winHandle : new WebDriverUtils().getDriver().getWindowHandles()) {
+            new WebDriverUtils().getDriver().switchTo().window(winHandle);
         }
         int userCount = userTablePage.getUserCount();
         mainPage.createNewUser(user2);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        webDriverUtils.PageSwitchTo(driver);
+        new AlertPage().clickOkButtonAlert();
+        webDriverUtils.PageSwitchTo();
         int newUserCount = userTablePage.getUserCount();
         Assert.assertEquals(newUserCount + " user", userCount + " user");
     }
 
     @Test(dataProvider = "validUser")
     public void DeleteValidUserDBStateConnect(User user) {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         WebDriverUtils webDriverUtils = new WebDriverUtils();
         mainPage.createNewUser(user);
-        while (!driver.getTitle().equals("VIP Database")) {
-            webDriverUtils.PageSwitchTo(driver);
+        while (!new WebDriverUtils().getTitle().equals("VIP Database")) {
+            webDriverUtils.PageSwitchTo();
         }
-        new AlertPage(driver).clickOkButtonAlert();
-        webDriverUtils.PageSwitchTo(driver);
+        new AlertPage().clickOkButtonAlert();
+        webDriverUtils.PageSwitchTo();
         mainPage.clickDeleteButton();
         userTablePage.isUserPresentedOnPage(user);
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), false);
@@ -134,8 +130,8 @@ public class CreateDeleteUserTestCase {
 
     @Test
     public void DeleteValidLoadedUserDBStateConnect() {
-        UserTablePage userTablePage = new UserTablePage(driver);
-        MainPage mainPage = new MainPage(driver);
+        UserTablePage userTablePage = new UserTablePage();
+        MainPage mainPage = new MainPage();
         mainPage.clickLoadButton();
         User user = userTablePage.selectGetRandomUser();
         mainPage.clickDeleteButton();
@@ -143,22 +139,18 @@ public class CreateDeleteUserTestCase {
         Assert.assertEquals(userTablePage.isUserPresentedOnPage(user), false);
     }
 
+    @BeforeMethod
+    public void refresh() {
+        new WebDriverUtils().refresh();
+    }
     @BeforeTest
     public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
+        new WebDriverUtils().load(new TestConfig().getSystemUnderTestBaseUrl());
     }
 
     @AfterTest
     public void tearDown() {
-        driver.close();
+        new WebDriverUtils().stop();
     }
-
-    @BeforeMethod
-    public void setUpBeforeMethod() {
-        driver.get("http://www.ranorex.com/web-testing-examples/vip/");
-    }
-
 }
 
