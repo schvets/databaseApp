@@ -8,8 +8,7 @@ https://docs.google.com/spreadsheets/d/1HwGo3xK4L48kYJYHJbzpf_PGJ_qfkk7Y5ZdbDXH7
 To run project:
 1) download chromedriver for your system
 https://chromedriver.storage.googleapis.com/index.html?path=2.29/
-2) unzip and copy downloaded .exe to SystemPath
-http://splinter.readthedocs.io/en/0.1/setup-chrome.html
+2) unzip and run chromedriver.exe 
 3) download  Apache Maven 
 https://maven.apache.org/download.cgi 
 4) install Apache Maven 
