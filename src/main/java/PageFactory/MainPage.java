@@ -156,12 +156,11 @@ public class MainPage {
         return connectionLabel;
     }
 
-    public boolean isSaveButtonClickable() {
+    public boolean connectionChecher() {
         return saveButton.isEnabled();
     }
 
     public boolean isLoadButtonClickable() {
         return loadButton.isEnabled();
     }
-
 }

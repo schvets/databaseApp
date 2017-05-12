@@ -20,6 +20,7 @@ public class UserTablePage {
     WebDriver driver;
     @FindBy(xpath = "//table[@id='VIPs']/tbody/tr")
     List<WebElement> userList;
+
     private List<WebElement> users;
 
     public UserTablePage(WebDriver driver) {
@@ -41,8 +42,7 @@ public class UserTablePage {
     }
 
     public void selectUserByFirstName(String firstName) {
-        users = getUserList();
-        for (WebElement we : users) {
+        for (WebElement we : getUserList()) {
             String actualFirstName = we.findElement(By.cssSelector("td:nth-child(2)")).getText();
             if (actualFirstName.equals(firstName)) {
                 we.findElement(By.id("VIP")).click();
@@ -51,8 +51,7 @@ public class UserTablePage {
     }
 
     public void selectUserByLastName(String lastName) {
-        users = getUserList();
-        for (WebElement we : users) {
+        for (WebElement we : getUserList()) {
             String actualLastName = we.findElement(By.cssSelector("td:nth-child(3)")).getText();
             if (actualLastName.equals(lastName)) {
                 we.findElement(By.id("VIP")).click();
@@ -73,8 +72,7 @@ public class UserTablePage {
     }
 
     public boolean isUserPresentedOnPage(User user) {
-        users = getUserList();
-        for (WebElement we : users) {
+        for (WebElement we : getUserList()) {
             String actualLastName = we.findElement(By.cssSelector("td:nth-child(3)")).getText();
             String actualFirstName = we.findElement(By.cssSelector("td:nth-child(2)")).getText();
             String actualCategory = we.findElement(By.cssSelector("td:nth-child(5)")).getText();
